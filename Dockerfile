@@ -19,9 +19,7 @@ RUN apt-get -y update
 RUN apt-get -y install git
 
 # Create the environment:
-COPY ldm ./ldm
-COPY setup.py .
-COPY environment.yaml .
+COPY . ./
 RUN conda env create -f environment.yaml
 
 # Make RUN commands use the new environment:
@@ -42,6 +40,10 @@ RUN echo -e "#! /bin/bash\n\n# script to activate the conda environment" > ~/.ba
 
 # environment variables
 ENV BASH_ENV ~/.bashrc
+
+# add ldm to default PATH
+ENV PATH="/root/miniconda3/envs/ldm/bin:${PATH}"
+ARG PATH="/root/miniconda3/envs/ldm/bin:${PATH}"
 
 # Run `docker build -t stable-diffusion .` to build a docker image.
 # Run a container by `docker run --gpus all -it --rm -p 8888:8888 stable-diffusion`.
